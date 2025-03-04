@@ -28,10 +28,10 @@ def latextomd(text):
     #     text = re.sub(r"\$\$(.*)\\\\\s*\n", r"$$\1\\\\ ", text)
 
     # # Replace :     $$      with : $$
-    # while re.search(r':\s+\$\$\s*', text):
-    #     text = re.sub(r':\s+\$\$\s*', r':$$', text)
-    # while re.search(r':\$\$', text):
-    #     text = re.sub(r':\$\$', r': $$', text)
+    # while re.search(r'([^\.\s])\s+\$\$\s*', text):
+    #     text = re.sub(r'([^\.\s])\s+\$\$\s*', r'\1$$', text)
+    # while re.search(r'([^\.\s])\$\$', text):
+    #     text = re.sub(r'([^\.\s])\$\$', r'\1 $$', text)
 
     # # Passe une ligne après une display mode si une nouvelle phrase commence après
     # while re.search(r'\$\$ ?[A-Z[0-9]*]',text):
