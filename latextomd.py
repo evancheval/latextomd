@@ -3,7 +3,7 @@ from PIL import Image
 import re
 
 # Si Tesseract n'est pas dans le PATH (Windows), décommente la ligne ci-dessous et remplace le chemin :
-# pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 def extract_text_from_image(image_path):
     """Utilise Tesseract OCR pour extraire le texte et les formules depuis une image."""
@@ -21,7 +21,7 @@ def apply_latextomd_rules(text):
     text = re.sub(r"\\\[(.*?)\\\]", r"$$\1$$", text, flags=re.DOTALL)
 
     # Règle 3 : Assurer que les align utilisent la bonne syntaxe
-    text = re.sub(r"\\begin{align}(.*?)\\end{align}", r"$$\begin{align}\1\end{align}$$", text, flags=re.DOTALL)
+    text = re.sub(r"\\begin{align}(.*?)\\end{align}", r"$$\\begin{align}\1\\end{align}$$", text, flags=re.DOTALL)
 
     # Règle 4 : Conserver la mise en forme (gras, italique, structures)  
     # (Déjà géré automatiquement par l'OCR)
@@ -45,6 +45,7 @@ def apply_latextomd_rules(text):
 if __name__ == "__main__":
     image_path = "image.png"  # Remplace par le chemin réel de ton image
     raw_text = extract_text_from_image(image_path)
+    print(raw_text)
     formatted_text = apply_latextomd_rules(raw_text)
 
     print("===== Texte formaté en Markdown =====")
