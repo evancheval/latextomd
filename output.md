@@ -1,6 +1,4 @@
+Par conséquent on obtient $$\begin{align*} \left| f(x) \ell(I^l) \right| \leq \left| S(I, f, \Pi_x) - \int_I f(x) dx \right| + \left| \int_I f(x) dx - S(I, f, \Pi) \right| + |f(x^l)| \frac{\ell(I)}{m} \\ \leq 2 + M \frac{\ell(I)}{m}. \end{align*}$$
+Enfin comme $\ell(I^l) = \ell(I) / m$ on en déduit que $|f(x)| \leq M + 2m / \ell(I)$.  
+Or comme $x$ est quelconque dans $I$ on en conclut que $f$ est bornée.
 
-Si $f$ est $R$-intégrable sur $I$ alors il existe $\delta > 0$ associé à $\varepsilon = 1$ et $\alpha = \int_I f(x)dx$ d’après la Définition 2. On fixe un $m \in \mathbb{N}^*$ vérifiant $\ell(I) \leq m\delta$ et on considère pour tout $1 \leq j \leq m$ les intervalles $$I^j = \left[ \min(I) + \frac{j-1}{m} \ell(I), \min(I) + \frac{j}{m} \ell(I) \right]$$ et $x^j = \min(I^j)$. Alors $\{I^j : 1 \leq j \leq m\}$ est une partition de $I$. De plus, la famille $$\Pi = \{(x^j, I^j) : 1 \leq j \leq m\}$$ est une $P$-partition de $I$ de pas $||\Pi|| \leq \delta$. En effet, on remarque que $$\ell(I^j) = \min(I) + \frac{j}{m} \ell(I) - \left( \min(I) + \frac{j-1}{m} \ell(I) \right) = \frac{\ell(I)}{m} \leq \delta$$
-Comme $||\Pi|| \leq \delta$ alors $\left| S(I, f, \Pi) - \int_I f(x)dx \right| \leq 1$. On pose à présent $M = \max_{1 \leq j \leq m} |f(x^j)|$.  
-On remarque que $M$ est nécessairement fini car $$\left| S(I, f, \Pi) - \int_I f(x)dx \right| \leq 1 \Rightarrow \sum_{j=1}^{m} f(x^j) \ell(I^j) - \int_I f(x)dx \leq 1$$
-Montrons que $f$ est bornée par une constante dépendante de $M$, $m$ et $\ell(I)$. Pour ce faire, on fixe $x \in I$. Comme la famille $\{I^j : 1 \leq j \leq m\}$ est une partition de $I$, alors il existe un indice $l$ tel que $x \in I^l$. On pose alors $$\Pi_x = \{(x^1, I^1), \dots, (x^{l-1}, I^{l-1}), (x, I^l), (x^{l+1}, I^{l+1}), \dots, (x^m, I^m)\}$$
-La famille $\Pi_x$ forme une $P$-partition de $I$ avec $||\Pi_x|| \leq \delta$, ce qui implique que $$\left| S(I, f, \Pi_x) - \int_I f(x)dx \right| \leq 1$$

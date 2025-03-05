@@ -7,6 +7,11 @@ def latextomd(text):
     while re.search(regex, text):
         text = re.sub(regex, r':\n\1', text)
 
+    # Remplace les || par des \|
+    regex = r'\|\|'
+    while re.search(regex, text):
+        text = re.sub(regex, r'\|', text)
+
     # Replace $...$ with \(...\)
     regex = r'(^|[^\$\\])\$(.*?[^\$\\])\$([^\$]|$)'
     while re.search(regex, text):
@@ -63,6 +68,10 @@ def latextomd(text):
     while re.search(regex,text):
         text = re.sub(regex, r'\1\n\(\(', text)
     
+    # Fusionne deux display mode qui se suivent
+    regex = r'\\\(\\\((?:\\begin{align\*?})?(.*?)(?:\\end{align\*?})?\\\)\\\)\s*\\\(\\\((?:\\begin{align\*?})?(.*?)(?:\\end{align\*?})?\\\)\\\)'
+    while re.search(regex, text, flags=re.DOTALL):
+        text = re.sub(regex, r'\(\(\\begin{align*} \1 \\\\ \2 \\end{align*}\)\)', text, flags=re.DOTALL)
 
     # Replace \( and \) with $
     regex = r'\\\('
