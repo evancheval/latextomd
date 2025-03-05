@@ -1,24 +1,6 @@
-$18 = 20-2$ et $27 = 32 - 5$
-Mon coca m'a coûté 10\$
 
-3. Soient $f$ et $g$ deux fonctions $R$-intégrables sur $I$ vérifiant $|f(x)| \leq g(x)$ pour tout $x \in I$. Alors on a :
-   $$
-   \left| \int_{I} f(x) dx \right| \leq \int_{I} g(x) dx
-   $$
-
-4. Soit $f$ une fonction $R$-intégrable sur $I$ telle que $|f|$ est $R$-intégrable sur $I$. Alors on a :
-   $$
-   \left| \int_{I} f(x) dx \right| \leq \int_{I} |f(x)| dx
-   $$
-
-5. Soit $f$ une fonction $R$-intégrable sur $I$ vérifiant $f(x) \geq 0$ pour tout $x \in I$. Alors on a :
-   $$
-   \int_{I} f(x) dx \geq 0
-   $$
-
-6. Soient $f : I \to \mathbb{R}$ et $\mathcal{P} = \{I^j : 1 \leq j \leq m\}$ une partition de $I$. Si $f$ est $R$-intégrable sur $I^j$ pour tout $j = 1, \dots, m$, alors $f$ est $R$-intégrable sur $I$ et on a :
-   $$
-   \int_{I} f(x) dx = \sum_{j=1}^{m} \int_{I^j} f(x) dx
-   $$
-
-$
+Si $f$ est $R$-intégrable sur $I$ alors il existe $\delta > 0$ associé à $\varepsilon = 1$ et $\alpha = \int_I f(x)dx$ d’après la Définition 2. On fixe un $m \in \mathbb{N}^*$ vérifiant $\ell(I) \leq m\delta$ et on considère pour tout $1 \leq j \leq m$ les intervalles $$I^j = \left[ \min(I) + \frac{j-1}{m} \ell(I), \min(I) + \frac{j}{m} \ell(I) \right]$$ et $x^j = \min(I^j)$. Alors $\{I^j : 1 \leq j \leq m\}$ est une partition de $I$. De plus, la famille $$\Pi = \{(x^j, I^j) : 1 \leq j \leq m\}$$ est une $P$-partition de $I$ de pas $||\Pi|| \leq \delta$. En effet, on remarque que $$\ell(I^j) = \min(I) + \frac{j}{m} \ell(I) - \left( \min(I) + \frac{j-1}{m} \ell(I) \right) = \frac{\ell(I)}{m} \leq \delta$$
+Comme $||\Pi|| \leq \delta$ alors $\left| S(I, f, \Pi) - \int_I f(x)dx \right| \leq 1$. On pose à présent $M = \max_{1 \leq j \leq m} |f(x^j)|$.  
+On remarque que $M$ est nécessairement fini car $$\left| S(I, f, \Pi) - \int_I f(x)dx \right| \leq 1 \Rightarrow \sum_{j=1}^{m} f(x^j) \ell(I^j) - \int_I f(x)dx \leq 1$$
+Montrons que $f$ est bornée par une constante dépendante de $M$, $m$ et $\ell(I)$. Pour ce faire, on fixe $x \in I$. Comme la famille $\{I^j : 1 \leq j \leq m\}$ est une partition de $I$, alors il existe un indice $l$ tel que $x \in I^l$. On pose alors $$\Pi_x = \{(x^1, I^1), \dots, (x^{l-1}, I^{l-1}), (x, I^l), (x^{l+1}, I^{l+1}), \dots, (x^m, I^m)\}$$
+La famille $\Pi_x$ forme une $P$-partition de $I$ avec $||\Pi_x|| \leq \delta$, ce qui implique que $$\left| S(I, f, \Pi_x) - \int_I f(x)dx \right| \leq 1$$
