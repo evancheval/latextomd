@@ -124,15 +124,15 @@ def latextomd(text):
     return text
 
 
-input_text = r"""
-"""
+# input_text = r"""
+# """
 
-# print(input_text)
-# print("--------------------")
-output_text = latextomd(input_text)
-# print(output_text)
+# # print(input_text)
+# # print("--------------------")
+# output_text = latextomd(input_text)
+# # print(output_text)
 
-# Sauvegarder dans un fichier texte
-with open("output.md", "w", encoding="utf-8") as f:
-    f.write(output_text)
-    print("Sauvegardé dans output.md")
+# # Sauvegarder dans un fichier texte
+# with open("output.md", "w", encoding="utf-8") as f:
+#     f.write(output_text)
+#     print("Sauvegardé dans output.md")
