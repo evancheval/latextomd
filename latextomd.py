@@ -2,6 +2,11 @@ import re
 
 def latextomd(text):
 
+    # Retire les titres
+    regex = r'^#+\s*'
+    while re.search(regex, text, flags=re.MULTILINE):
+        text = re.sub(regex, r'', text, flags=re.MULTILINE)
+
     # Retire les sauts de ligne inutiles après un :
     regex = r':\s*\n\n( *[\$\-])'
     while re.search(regex, text):
@@ -42,16 +47,29 @@ def latextomd(text):
     while re.search(regex, text, flags=re.DOTALL):
         text = re.sub(regex, r'\(\(\1\)\)', text, flags=re.DOTALL)
 
-    # Replace $$...\\        with $$...\\ 
-    regex = r'\\\(\\\((.*)\\\\\s*\n'
+    # Supprime les retour à la ligne après un \begin{align} et avant un \end{align}
+    regex = r'\\begin{align\*?}\s*\n'
     while re.search(regex, text):
-        text = re.sub(regex, r"\(\(\1\\\\ ", text)
+        text = re.sub(regex, r'\\begin{align*} ', text)
+    regex = r'\n\s*\\end{align\*?}'
+    while re.search(regex, text):
+        text = re.sub(regex, r' \\end{align*}', text)
+
+    # Replace $$...\\        with $$...\\ 
+    regex = r'\\\(\\\((.*?),?\s*\\\\\s*\n'
+    while re.search(regex, text):
+        text = re.sub(regex, r"\(\(\1 \\\\ ", text)
+
+    # Fusionne deux display mode qui se suivent
+    regex = r'\\\(\\\((?:\\begin{align\*?})?(.*?)(?:\\end{align\*?})?\\\)\\\)\s*\\\(\\\((?:\\begin{align\*?})?(.*?)(?:\\end{align\*?})?\\\)\\\)'
+    while re.search(regex, text):
+        text = re.sub(regex, r'\(\(\\begin{align*} \1 \\\\ \2 \\end{align*}\)\)', text)
 
     # Replace :     $$      with : $$
-    regex = r'([:,;a-z])\s+\\\(\\\(\s*'
+    regex = r'([:,;a-z\**])\s+\\\(\\\(\s*'
     while re.search(regex, text):
         text = re.sub(regex, r'\1\(\(', text)
-    regex = r'([:,;a-z])\\\(\\\('
+    regex = r'([:,;a-z\**])\\\(\\\('
     while re.search(regex, text):
         text = re.sub(regex, r'\1 \(\(', text)
 
@@ -59,7 +77,10 @@ def latextomd(text):
     regex = r'\\\)\\\)+ ?([A-Z0-9])'
     while re.search(regex, text):
         text = re.sub(regex, r'\)\)\n\1', text)
-    regex = r'\\\)\\\)([a-z])'
+    regex = r'\\\)\\\)\s+([a-z\**])'
+    while re.search(regex, text):
+        text = re.sub(regex, r'\)\)\1', text)
+    regex = r'\\\)\\\)([a-z\**])'
     while re.search(regex, text):
         text = re.sub(regex, r'\)\) \1', text)
 
@@ -68,11 +89,6 @@ def latextomd(text):
     while re.search(regex,text):
         text = re.sub(regex, r'\1\n\(\(', text)
     
-    # Fusionne deux display mode qui se suivent
-    regex = r'\\\(\\\((?:\\begin{align\*?})?(.*?)(?:\\end{align\*?})?\\\)\\\)\s*\\\(\\\((?:\\begin{align\*?})?(.*?)(?:\\end{align\*?})?\\\)\\\)'
-    while re.search(regex, text, flags=re.DOTALL):
-        text = re.sub(regex, r'\(\(\\begin{align*} \1 \\\\ \2 \\end{align*}\)\)', text, flags=re.DOTALL)
-
     # Replace \( and \) with $
     regex = r'\\\('
     while re.search(regex,text):
