@@ -17,8 +17,10 @@ def latextomd(text):
     while re.search(regex, text):
         text = re.sub(regex, r'\|', text)
 
-    # Replace $...$ with \(...\)
-    regex = r'(^|[^\$\\])\$(.*?[^\$\\])\$([^\$]|$)'
+    regex = r'(^|[^\$\\])\$([^\$\\]|$)'
+    text = re.sub(regex, r'\1  $  \2', text)
+
+    regex = r'(^|[^\$\\])\$([^\$]|[^\$].*?[^\$\\])\$([^\$]|$)'
     while re.search(regex, text):
         text = re.sub(regex, r'\1\(\2\)\3', text)
     
@@ -66,10 +68,10 @@ def latextomd(text):
         text = re.sub(regex, r'\(\(\\begin{align*} \1 \\\\ \2 \\end{align*}\)\)', text)
 
     # Replace :     $$      with : $$
-    regex = r'([:,;a-z\**])\s+\\\(\\\(\s*'
+    regex = r'([:,;a-zéèàù\**])\s+\\\(\\\(\s*'
     while re.search(regex, text):
         text = re.sub(regex, r'\1\(\(', text)
-    regex = r'([:,;a-z\**])\\\(\\\('
+    regex = r'([:,;a-zéèàù\**])\\\(\\\('
     while re.search(regex, text):
         text = re.sub(regex, r'\1 \(\(', text)
 
@@ -77,10 +79,10 @@ def latextomd(text):
     regex = r'\\\)\\\)+ ?([A-Z0-9])'
     while re.search(regex, text):
         text = re.sub(regex, r'\)\)\n\1', text)
-    regex = r'\\\)\\\)\s+([a-z\**])'
+    regex = r'\\\)\\\)\s+([a-zéèàù\**])'
     while re.search(regex, text):
         text = re.sub(regex, r'\)\)\1', text)
-    regex = r'\\\)\\\)([a-z\**])'
+    regex = r'\\\)\\\)([a-zéèàù\**])'
     while re.search(regex, text):
         text = re.sub(regex, r'\)\) \1', text)
 
@@ -88,19 +90,30 @@ def latextomd(text):
     regex = r'([\.!\?])\\\(\\\('
     while re.search(regex,text):
         text = re.sub(regex, r'\1\n\(\(', text)
+
+    # Supprime les espaces dans $...$ . et $...$ ,
+    regex = r'\\\) +([,\.])'
+    while re.search(regex,text):
+        text = re.sub(regex, r'\)\1', text)
     
     # Replace \( and \) with $
     regex = r'\\\('
     while re.search(regex,text):
         text = re.sub(regex, r'$', text)
+
     regex = r'[\.,]?\\\)'
     while re.search(regex,text):
         text = re.sub(regex, r'$', text)
 
+    # Replace             with  
+    regex = r'  +'
+    text = re.sub(regex, r' ', text)
+
     return text
 
 
-input_text = r"""
+input_text = r"""**Définition 9.** Soit $f : \mathbb{R} \to \mathbb{R}$ une fonction. On dit que $f$ est dérivable par morceaux sur $\mathbb{R}$, si à chaque fois que $f$ est restreinte à un intervalle non vide $[a,b]$ de $\mathbb{R}$ il existe un nombre fini de points $(x_i)_{1 \leq i \leq n}$ de $[a, b]$ vérifiant $$a = x_1 < x_2 < \dots < x_m = b,$$ tel que la restriction de $f$ à chaque intervalle $]x_i, x_{i+1}[$ $(1 \leq i \leq m - 1)$ se prolonge en une fonction dérivable sur $[x_i, x_{i+1}]$.
+
 """
 
 # print(input_text)
