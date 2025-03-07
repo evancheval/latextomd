@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTextEdit, QPushButton, QVBoxLayout, QWidget
-from PyQt5.QtGui import QClipboard
+from PyQt5.QtGui import QClipboard, QIcon
+from PyQt5.QtCore import Qt
 import sys
 import os
 
@@ -21,14 +22,17 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         self.setWindowTitle("latextomd GUI")
-        self.resize(960, 100)  # Set the window size to 400x400 pixels
+        self.setWindowIcon(QIcon('C:/Users/evanc/source/repos/latextomd/src/images/icon.ico'))  # Set the window icon
+        self.resize(840, 100)  # Set the window size to 400x400 pixels
+        self.setWindowFlags(Qt.FramelessWindowHint)  # Remove the title bar and frame
+        self.move(0, 980)  # Set the window position to (100, 100)
 
         # self.quit_button = QPushButton("Quit", self)
         # self.quit_button.clicked.connect(self.quit_application)
 
         self.copy_button = QPushButton("🚀", self)
-        self.copy_button.setFixedSize(960, 100)  # Enlarge the copy_button
-        self.copy_button.setStyleSheet("font-size: 70px;")  # Enlarge the button text
+        self.copy_button.setFixedSize(840, 80)  # Enlarge the copy_button
+        self.copy_button.setStyleSheet("font-size: 60px;")  # Enlarge the button text
         self.copy_button.clicked.connect(self.proceed_on_clipboard)
 
         layout = QVBoxLayout()
