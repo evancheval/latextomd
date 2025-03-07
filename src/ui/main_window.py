@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTextEdit, QPushButton, QVBoxLayout, QWidget
 from PyQt5.QtGui import QClipboard, QIcon
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QBuffer, QIODevice
 import sys
 import os
 
@@ -16,6 +16,12 @@ except ImportError as e:
     print(f"Error importing latextomd: {e}")
     sys.exit(1)
 
+# Import the extract_text_from_image function
+try:
+    from src.mathpix import extract_text_from_image  # Adjust the import statement to match your project structure
+except ImportError as e:
+    print(f"Error importing extract_text_from_image: {e}")
+    sys.exit(1)
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -30,13 +36,13 @@ class MainWindow(QMainWindow):
         # self.quit_button = QPushButton("Quit", self)
         # self.quit_button.clicked.connect(self.quit_application)
 
-        self.copy_button = QPushButton("🚀", self)
-        self.copy_button.setFixedSize(840, 80)  # Enlarge the copy_button
-        self.copy_button.setStyleSheet("font-size: 60px;")  # Enlarge the button text
-        self.copy_button.clicked.connect(self.proceed_on_clipboard)
+        self.proceed_button = QPushButton("🚀", self)
+        self.proceed_button.setFixedSize(840, 80)  # Enlarge the proceed_button
+        self.proceed_button.setStyleSheet("font-size: 50px;")  # Enlarge the button text
+        self.proceed_button.clicked.connect(self.proceed_on_clipboard)
 
         layout = QVBoxLayout()
-        layout.addWidget(self.copy_button)
+        layout.addWidget(self.proceed_button)
         # layout.addWidget(self.quit_button)
 
         container = QWidget()
@@ -44,11 +50,23 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(container)
 
     def proceed_on_clipboard(self):
+        self.proceed_button.setText("🔄️")  # Change the button text while processing
         clipboard = QApplication.clipboard()
-        input_text = clipboard.text()
-        output_text = latextomd(input_text)  # Apply the latextomd function
-        clipboard.setText(output_text)
-
+        mime_data = clipboard.mimeData()
+        if mime_data.hasImage():
+            image = clipboard.image()
+            buffer = QBuffer()
+            buffer.open(QIODevice.WriteOnly)
+            image.save(buffer, "PNG")
+            image_data = buffer.data().data()
+            extracted_text = extract_text_from_image(image_data) # Extract text from the image with MathPix API
+            converted_text = latextomd(extracted_text) # Apply the latextomd function
+            clipboard.setText(converted_text) # Copy the converted text to the clipboard
+            self.proceed_button.setText("🚀") # Change the button text back to the original text
+        else:
+            clipboard.setText("No image found in clipboard.")
+            self.proceed_button.setText("❌")  # Change the button text if did not succeed
+            
     # def quit_application(self):
     #     QApplication.quit()
 

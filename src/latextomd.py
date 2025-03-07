@@ -2,6 +2,26 @@ import re
 
 def latextomd(text):
 
+    # Remplace les \bar par \overline
+    regex = r'\\bar'
+    while re.search(regex, text):
+        text = re.sub(regex, r'\\overline', text)
+
+    # Remplace les \mathrm{P} par \mathbb{P}
+    regex = r'\\mathrm\{P\}'
+    while re.search(regex, text):
+        text = re.sub(regex, r'\\mathbb{P}', text)
+
+    # Remplace les \Leftrightarrow par \iff
+    regex = r'\\Leftrightarrow'
+    while re.search(regex, text):
+        text = re.sub(regex, r'\\iff', text)
+
+    # Remplace les \Rightarrow par \implies
+    regex = r'\\Rightarrow'
+    while re.search(regex, text):
+        text = re.sub(regex, r'\\implies', text)
+
     # Retire les titres
     regex = r'^#+\s*'
     while re.search(regex, text, flags=re.MULTILINE):
@@ -24,6 +44,11 @@ def latextomd(text):
     while re.search(regex, text):
         text = re.sub(regex, r'\1\(\2\)\3', text)
     
+    # Add a space after \) if there is a word after
+    regex = r'\\\)([a-z])'
+    while re.search(regex, text):
+        text = re.sub(regex, r'\) \1', text)
+
     # Replace $ ...$ with $...$ but not $$ ...$$
     regex = r'\\\(\s+(.*?)\\\)'
     while re.search(regex,text):
@@ -71,7 +96,7 @@ def latextomd(text):
         text = re.sub(regex, r"\(\(\1 \\\\ ", text)
 
     # Fusionne deux display mode qui se suivent
-    regex = r'\\\(\\\((?:\\begin{align\*?})?(.*?)(?:\\end{align\*?})?\\\)\\\)\s*\\\(\\\((?:\\begin{align\*?})?(.*?)(?:\\end{align\*?})?\\\)\\\)'
+    regex = r'\\\(\\\((?:\\begin{align(?:ed)?\*?})?(.*?)(?:\\end{align(?:ed)?\*?})?\\\)\\\)\s*\\\(\\\((?:\\begin{align(?:ed)?\*?})?(.*?)(?:\\end{align(?:ed)?\*?})?\\\)\\\)'
     while re.search(regex, text):
         text = re.sub(regex, r'\(\(\\begin{align*} \1 \\\\ \2 \\end{align*}\)\)', text)
 
