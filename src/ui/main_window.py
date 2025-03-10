@@ -60,12 +60,14 @@ class MainWindow(QMainWindow):
             image.save(buffer, "PNG")
             image_data = buffer.data().data()
             extracted_text = extract_text_from_image(image_data) # Extract text from the image with MathPix API
-            converted_text = latextomd(extracted_text) # Apply the latextomd function
-            clipboard.setText(converted_text) # Copy the converted text to the clipboard
-            self.proceed_button.setText("🚀") # Change the button text back to the original text
         else:
-            clipboard.setText("No image found in clipboard.")
-            self.proceed_button.setText("❌")  # Change the button text if did not succeed
+            extracted_text = clipboard.text() # Extract text from the clipboard as there is no image
+            # clipboard.setText("No image found in clipboard.")
+            # self.proceed_button.setText("❌")  # Change the button text if did not succeed
+        
+        converted_text = latextomd(extracted_text) # Apply the latextomd function
+        clipboard.setText(converted_text) # Copy the converted text to the clipboard
+        self.proceed_button.setText("🚀") # Change the button text back to the original text
             
     # def quit_application(self):
     #     QApplication.quit()

@@ -2,6 +2,16 @@ import re
 
 def latextomd(text):
 
+    # Remplace les \vee par \lor
+    regex = r'\\vee'
+    while re.search(regex, text):
+        text = re.sub(regex, r'\\lor', text)
+    
+    # Remplace les \wedge par \land
+    regex = r'\\wedge'
+    while re.search(regex, text):
+        text = re.sub(regex, r'\\land', text)
+
     # Remplace les \bar par \overline
     regex = r'\\bar'
     while re.search(regex, text):
@@ -83,10 +93,10 @@ def latextomd(text):
         text = re.sub(regex, r'\(\(\1\)\)', text, flags=re.DOTALL)
 
     # Supprime les retour à la ligne après un \begin{align} et avant un \end{align}
-    regex = r'\\begin{align\*?}\s*\n'
+    regex = r'\\begin{align(?:ed)?\*?}\s*\n'
     while re.search(regex, text):
         text = re.sub(regex, r'\\begin{align*} ', text)
-    regex = r'\n\s*\\end{align\*?}'
+    regex = r'\n\s*\\end{align(?:ed)?\*?}'
     while re.search(regex, text):
         text = re.sub(regex, r' \\end{align*}', text)
 
@@ -132,6 +142,13 @@ def latextomd(text):
     while re.search(regex,text):
         text = re.sub(regex, r'(\(', text)
     
+    # Replace \begin{aligned} and \end{aligned} with \begin{align*} and \end{align*}
+    regex = r'\\begin{aligned\*?}'
+    while re.search(regex, text):
+        text = re.sub(regex, r'\\begin{align*}', text)
+    regex = r'\\end{aligned\*?}'
+    while re.search(regex, text):
+        text = re.sub(regex, r'\\end{align*}', text)
     
     # Replace \( and \) with $
     regex = r'\\\('
