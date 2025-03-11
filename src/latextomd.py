@@ -2,6 +2,11 @@ import re
 
 def latextomd(text):
 
+    # remplace les \backslash par \setminus
+    regex = r'\\backslash'
+    while re.search(regex, text):
+        text = re.sub(regex, r'\\setminus', text)
+
     # Remplace les \vee par \lor
     regex = r'\\vee'
     while re.search(regex, text):
