@@ -2,6 +2,16 @@ import re
 
 def latextomd(text):
 
+    # ajoute un espace devant : s'il n'y en a pas
+    regex = r'([^ ]):'
+    while re.search(regex, text):
+        text = re.sub(regex, r'\1 :', text)
+
+    # ajoute un espace devant les dx dans les intégrales
+    regex = r'\\int(.*?) d ?([a-z])'
+    while re.search(regex, text):
+        text = re.sub(regex, r'\\int\1 \\,d\2', text)
+
     # remplace les \backslash par \setminus
     regex = r'\\backslash'
     while re.search(regex, text):
