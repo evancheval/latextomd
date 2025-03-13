@@ -2,6 +2,12 @@ import re
 
 def latextomd(text):
 
+    # Transforme les \left\{\begin{array}{..} (...) \end{array}\right en \begin{cases} (...) \end{cases}
+    regex = r'\\left\\{\\begin{array} ?(?:{.*?})?(.*?)\\end{array}\\right'
+    while re.search(regex, text, flags=re.DOTALL):
+        text = re.sub(regex, r'\\begin{cases} \1 \\end{cases}', text, flags=re.DOTALL)
+
+
     # ajoute un espace devant : s'il n'y en a pas
     regex = r'([^ ]):'
     while re.search(regex, text):
@@ -134,7 +140,7 @@ def latextomd(text):
         text = re.sub(regex, r'\1 \(\(', text)
 
     # Passe une ligne après une display mode si une nouvelle phrase commence après, sinon on mets un espace parce que la phrase continue
-    regex = r'\\\)\\\)+ ?([A-Z0-9-])'
+    regex = r'\\\)\\\)+ ?([A-ZÀÉÈÙÔ0-9-])'
     while re.search(regex, text):
         text = re.sub(regex, r'\)\)\n\1', text)
     regex = r'\\\)\\\)\s+([a-zéèàù\**])'
